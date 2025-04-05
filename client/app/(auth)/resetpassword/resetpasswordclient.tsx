@@ -1,6 +1,7 @@
-"use client";
+"use client"; // Make sure this is at the top
+
 import React, { useState } from "react";
-import { Suspense } from "react";
+import { Suspense } from "react"; // Import Suspense to wrap around components
 import {
   Form,
   FormControl,
@@ -19,19 +20,17 @@ import api from "@/utils/api";
 import { useSearchParams, useRouter } from "next/navigation";
 import { resetPasswordFormSchema } from "@/schemas/ResetPasswordSchema";
 
+// Main component wrapped in Suspense
 const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const searchParams = useSearchParams();
 
-  // Get and decode email from URL params
   const encodedEmail = searchParams.get("email");
   const email = encodedEmail ? decodeURIComponent(encodedEmail) : null;
-
   const token = searchParams.get("token");
   const router = useRouter();
 
-  // Redirect if email or token is missing
   React.useEffect(() => {
     if (!email || !token) {
       router.push("/sign-in");
@@ -67,12 +66,6 @@ const ResetPassword = () => {
 
     setIsLoading(true);
     try {
-      console.log("Form Values: ", {
-        email: email,
-        token: token,
-        newPassword: values.password,
-        confirmPassword: values.confirmPassword,
-      });
       const response = await api.post("/Auth/ResetPassword", {
         email: email,
         token: token,
@@ -89,85 +82,85 @@ const ResetPassword = () => {
     } finally {
       setIsLoading(false);
     }
-
-    console.log("Form Values: ", values);
   };
 
   return (
-    <Suspense>
-      <>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
-            <h1 className="form-title">Enter your new password</h1>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
+        <h1 className="form-title">Enter your new password</h1>
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="shad-form-item">
-                    <FormControl>
-                      <div className="flex items-center justify-between gap-3">
-                        <Lock size={20} className="text-gray-400" />
-                        <Input
-                          type="password"
-                          placeholder="Enter your password"
-                          className="shad-input"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <div className="shad-form-item">
+                <FormControl>
+                  <div className="flex items-center justify-between gap-3">
+                    <Lock size={20} className="text-gray-400" />
+                    <Input
+                      type="password"
+                      placeholder="Enter your password"
+                      className="shad-input"
+                      {...field}
+                    />
                   </div>
-                  <FormMessage className="shad-form-message" />
-                </FormItem>
-              )}
-            />
+                </FormControl>
+              </div>
+              <FormMessage className="shad-form-message" />
+            </FormItem>
+          )}
+        />
 
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="shad-form-item">
-                    <FormControl>
-                      <div className="flex items-center justify-between gap-3">
-                        <Lock size={20} className="text-gray-400" />
-                        <Input
-                          type="password"
-                          placeholder="Confirm your password"
-                          className="shad-input"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <div className="shad-form-item">
+                <FormControl>
+                  <div className="flex items-center justify-between gap-3">
+                    <Lock size={20} className="text-gray-400" />
+                    <Input
+                      type="password"
+                      placeholder="Confirm your password"
+                      className="shad-input"
+                      {...field}
+                    />
                   </div>
-                  <FormMessage className="shad-form-message" />
-                </FormItem>
-              )}
-            />
+                </FormControl>
+              </div>
+              <FormMessage className="shad-form-message" />
+            </FormItem>
+          )}
+        />
 
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <Button
-              type="submit"
-              className="form-submit-button text-white"
-              disabled={isLoading}
-            >
-              Change Password
-              {isLoading && (
-                <Image
-                  src="/loader.svg"
-                  alt="loader"
-                  width={24}
-                  height={24}
-                  className="ml-2 animate-spin"
-                />
-              )}
-            </Button>
-          </form>
-        </Form>
-      </>
-    </Suspense>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <Button
+          type="submit"
+          className="form-submit-button text-white"
+          disabled={isLoading}
+        >
+          Change Password
+          {isLoading && (
+            <Image
+              src="/loader.svg"
+              alt="loader"
+              width={24}
+              height={24}
+              className="ml-2 animate-spin"
+            />
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 };
 
-export default ResetPassword;
+export default function Page() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <ResetPassword />
+    </Suspense>
+  );
+}
