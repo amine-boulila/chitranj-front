@@ -31,7 +31,7 @@ export default function EditProfilePage() {
 
           setUser(data);
           setNewUsername(data.username);
-          console.log("User Data:", data); // Debugging: see user info
+          console.log("User Data:", data);
         }
       } catch {
         console.log("User not logged in");
@@ -42,6 +42,11 @@ export default function EditProfilePage() {
   }, []);
 
   const handleUsernameUpdate = async () => {
+    if (!user) {
+      console.error("User is null, cannot update username.");
+      return;
+    }
+
     try {
       await api.put(`/User/${user.id}`, { id: user.id, userName: newUsername });
       setUser((prev) => prev && { ...prev, username: newUsername });
@@ -59,15 +64,13 @@ export default function EditProfilePage() {
   };
 
   const handlePhotoUpload = async () => {
-    if (!selectedPhoto) return;
-    const formData = new FormData();
+    if (!selectedPhoto || !user) return;
 
+    const formData = new FormData();
     formData.append("file", selectedPhoto);
 
     try {
-      if (!user) return;
       const res = await api.patch(`/User/${user.id}`, formData);
-
       if (res.status === 200) {
         setUser((prev) => prev && { ...prev, photoUrl: res.data.imageUrl });
         setSelectedPhoto(null);
