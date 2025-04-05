@@ -1,10 +1,6 @@
-// app/(auth)/resetpassword/page.tsx
-import dynamic from "next/dynamic";
+"use client"; // ← this is the key part
 
-// Lazy-load the component without SSR
-const ResetPassword = dynamic(() => import("./resetpasswordclient"), {
-  ssr: false,
-});
+import ResetPassword from "./resetpasswordclient";
 
 export default function Page() {
   return <ResetPassword />;
