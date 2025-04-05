@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { Suspense } from "react";
 import {
   Form,
   FormControl,
@@ -93,77 +94,79 @@ const ResetPassword = () => {
   };
 
   return (
-    <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
-          <h1 className="form-title">Enter your new password</h1>
+    <Suspense>
+      <>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
+            <h1 className="form-title">Enter your new password</h1>
 
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <div className="shad-form-item">
-                  <FormControl>
-                    <div className="flex items-center justify-between gap-3">
-                      <Lock size={20} className="text-gray-400" />
-                      <Input
-                        type="password"
-                        placeholder="Enter your password"
-                        className="shad-input"
-                        {...field}
-                      />
-                    </div>
-                  </FormControl>
-                </div>
-                <FormMessage className="shad-form-message" />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="shad-form-item">
+                    <FormControl>
+                      <div className="flex items-center justify-between gap-3">
+                        <Lock size={20} className="text-gray-400" />
+                        <Input
+                          type="password"
+                          placeholder="Enter your password"
+                          className="shad-input"
+                          {...field}
+                        />
+                      </div>
+                    </FormControl>
+                  </div>
+                  <FormMessage className="shad-form-message" />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <div className="shad-form-item">
-                  <FormControl>
-                    <div className="flex items-center justify-between gap-3">
-                      <Lock size={20} className="text-gray-400" />
-                      <Input
-                        type="password"
-                        placeholder="Confirm your password"
-                        className="shad-input"
-                        {...field}
-                      />
-                    </div>
-                  </FormControl>
-                </div>
-                <FormMessage className="shad-form-message" />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="shad-form-item">
+                    <FormControl>
+                      <div className="flex items-center justify-between gap-3">
+                        <Lock size={20} className="text-gray-400" />
+                        <Input
+                          type="password"
+                          placeholder="Confirm your password"
+                          className="shad-input"
+                          {...field}
+                        />
+                      </div>
+                    </FormControl>
+                  </div>
+                  <FormMessage className="shad-form-message" />
+                </FormItem>
+              )}
+            />
 
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <Button
-            type="submit"
-            className="form-submit-button text-white"
-            disabled={isLoading}
-          >
-            Change Password
-            {isLoading && (
-              <Image
-                src="/loader.svg"
-                alt="loader"
-                width={24}
-                height={24}
-                className="ml-2 animate-spin"
-              />
-            )}
-          </Button>
-        </form>
-      </Form>
-    </>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            <Button
+              type="submit"
+              className="form-submit-button text-white"
+              disabled={isLoading}
+            >
+              Change Password
+              {isLoading && (
+                <Image
+                  src="/loader.svg"
+                  alt="loader"
+                  width={24}
+                  height={24}
+                  className="ml-2 animate-spin"
+                />
+              )}
+            </Button>
+          </form>
+        </Form>
+      </>
+    </Suspense>
   );
 };
 
