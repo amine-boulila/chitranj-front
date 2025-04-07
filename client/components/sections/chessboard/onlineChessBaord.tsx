@@ -51,7 +51,8 @@ export default function ChessGame({ playerName }: { playerName: string }) {
   // Initialize socket connection
   useEffect(() => {
     const socketInstance = io(
-      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001"
+      process.env.NEXT_PUBLIC_SOCKET_URL ||
+        "https://expresssocket-c15a.onrender.com"
     );
     setSocket(socketInstance);
 
