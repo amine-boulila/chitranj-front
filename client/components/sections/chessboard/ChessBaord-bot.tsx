@@ -190,9 +190,18 @@ export default function ChessGame() {
               <div className="aspect-square">
                 <Chessboard
                   position={game.fen()}
-                  onPieceDrop={(source, target) =>
+                  onPieceDrop={(source, target) => {
                     makeMove({ from: source, to: target, promotion: "q" })
-                  }
+                      .then((success) => {
+                        if (!success) {
+                          console.error("Invalid move");
+                        }
+                      })
+                      .catch((error) => {
+                        console.error("Error making move:", error);
+                      });
+                    return true; // Return a boolean synchronously
+                  }}
                   onSquareClick={onSquareClick}
                   customSquareStyles={{
                     ...highlightedSquares,
