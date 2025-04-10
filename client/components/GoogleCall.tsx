@@ -12,14 +12,17 @@ const GoogleCallBack: React.FC<GoogleCallBackProps> = ({ error, tokens }) => {
     const sendToBackend = async () => {
       if (tokens?.id_token) {
         try {
-          const response = await fetch("http://localhost:5000/auth/google", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ idToken: tokens.id_token }),
-            credentials: "include", // 👈 ADD THIS LINE
-          });
+          const response = await fetch(
+            "https://chitranj-back.onrender.com/auth/google",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ idToken: tokens.id_token }),
+              credentials: "include", // 👈 ADD THIS LINE
+            }
+          );
 
           const text = await response.text();
           try {
@@ -52,7 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const clientId =
     "69383371855-o318d1fb0rtkfhlgfeo17r648slb8pkm.apps.googleusercontent.com";
   const clientSecret = "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"; // 🔥 Replace this with your actual secret
-  const redirectUri = "http://localhost:3000/GoogleCallBack";
+  const redirectUri = "https://chitranj-front-24tl.vercel.app/GoogleCallBack";
 
   const tokenUrl = "https://oauth2.googleapis.com/token";
   const params = new URLSearchParams();
