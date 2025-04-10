@@ -66,7 +66,7 @@ export default function ChessGame() {
         const formattedMove = `${nextMove.from}${nextMove.to}`;
         const updatedMoveLog = [...moveLog, formattedMove];
         setMoveLog(updatedMoveLog);
-        console.log("Move Log:", moveLog.join(" "));
+        console.log("Move Log:", moveLog.join(" ") + ` ${formattedMove}`);
         // Request analysis with the updated move log
         const response = await api.post("/Stockfish/bestmove", {
           moves: moveLog.join(" ") + ` ${formattedMove}`,
