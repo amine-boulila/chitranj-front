@@ -1,4 +1,4 @@
-// pages/GoogleCallBack.tsx
+"use client";
 import { GetServerSideProps } from "next";
 import React, { useEffect } from "react";
 
