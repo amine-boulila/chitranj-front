@@ -86,7 +86,9 @@ const ChooseGamePage = () => {
   const handleJoinGame = () => {
     setShowJoinModal(true);
   };
-
+  const handlePlaybot = () => {
+    router.push("/chessboard-bot");
+  };
   const handlePlayLocally = () => {
     router.push("/chessboard");
   };
@@ -145,7 +147,7 @@ const ChooseGamePage = () => {
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-white text-black px-4">
       <h1 className="text-4xl font-bold mb-8 text-black">Choose Your Game</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl w-full">
         <button
           onClick={handlePlayLocally}
           className="flex flex-col items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg p-8 shadow-lg transition-colors h-64 border border-gray-300"
@@ -154,6 +156,16 @@ const ChooseGamePage = () => {
           <h2 className="text-2xl font-semibold mb-2">Play Locally</h2>
           <p className="text-center text-gray-600">
             Play chess with a friend on the same device
+          </p>
+        </button>
+        <button
+          onClick={handlePlaybot}
+          className="flex flex-col items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg p-8 shadow-lg transition-colors h-64 border border-gray-300"
+        >
+          <div className="text-5xl mb-4">🤖</div>
+          <h2 className="text-2xl font-semibold mb-2">Play against bot</h2>
+          <p className="text-center text-gray-600">
+            Play chess against an ai bot
           </p>
         </button>
 

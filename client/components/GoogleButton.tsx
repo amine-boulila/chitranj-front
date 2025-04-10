@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+// import { BASE_URL } from "@/constants/env";
 interface GoogleButtonProps {
   text: string;
 }
@@ -7,32 +7,20 @@ interface GoogleButtonProps {
 const GoogleButton: React.FC<GoogleButtonProps> = ({ text }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignIn = async () => {
+  const handleSignIn = () => {
     setIsLoading(true);
+    const clientId =
+      "69383371855-o318d1fb0rtkfhlgfeo17r648slb8pkm.apps.googleusercontent.com";
+    // Replace with your actual callback URL where you handle the OAuth response.
+    const redirectUri = encodeURIComponent(
+      "http://localhost:3000/GoogleCallBack"
+    );
+    const scope = encodeURIComponent("openid email profile");
+    // Use response_type=code for Authorization Code Flow
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
 
-    try {
-      const response = await fetch("http://localhost:5000/Auth/google", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}), // Add any required payload here
-        credentials: "include", // Include cookies if needed
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Handle the response (e.g., redirect to a dashboard or save a token)
-        console.log("Sign-in successful:", data);
-        window.location.href = "/dashboard"; // Redirect to a dashboard or another page
-      } else {
-        console.error("Sign-in failed:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error during sign-in:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    // Redirect to Google's OAuth endpoint
+    window.location.href = googleAuthUrl;
   };
 
   return (

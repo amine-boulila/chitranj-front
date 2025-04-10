@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import api from "@/utils/api";
 export default function ChessGame() {
   const router = useRouter();
   const [game, setGame] = useState(new Chess());
@@ -50,9 +51,9 @@ export default function ChessGame() {
     return `${game.turn() === "w" ? "White" : "Black"} to move`;
   };
 
-  function makeMove(
+  async function makeMove(
     move: string | { from: string; to: string; promotion?: string }
-  ): boolean {
+  ): Promise<boolean> {
     try {
       const newGame = new Chess(game.fen());
       const nextMove = newGame.move(move);
@@ -62,10 +63,33 @@ export default function ChessGame() {
         setSelectedSquare(null);
         setHighlightedSquares({});
 
-        // Format move with turn number
         const formattedMove = `${nextMove.from}${nextMove.to}`;
+        const updatedMoveLog = [...moveLog, formattedMove];
+        setMoveLog(updatedMoveLog);
+        console.log("Move Log:", moveLog.join(" "));
+        // Request analysis with the updated move log
+        const response = await api.post("/Stockfish/bestmove", {
+          moves: moveLog.join(" ") + ` ${formattedMove}`,
+        });
+        // Extract bestMove from response
+        const bestMove = response?.data?.bestMove;
+        if (bestMove && bestMove.length === 4) {
+          const aiMove = {
+            from: bestMove.slice(0, 2),
+            to: bestMove.slice(2, 4),
+            promotion: "q", // optional: promote to queen
+          };
 
-        setMoveLog((prevLog) => [...prevLog, formattedMove]);
+          // Play the best move
+          const aiGame = new Chess(newGame.fen());
+          const aiNextMove = aiGame.move(aiMove);
+          if (aiNextMove) {
+            setGame(aiGame);
+            const aiFormatted = `${aiNextMove.from}${aiNextMove.to}`;
+            setMoveLog((log) => [...log, aiFormatted]);
+          }
+        }
+
         return true;
       }
     } catch (error) {
